@@ -1,0 +1,40 @@
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: 
+// 
+// Create Date:    10:55:12 04/15/2019 
+// Design Name: 
+// Module Name:    clk_produce 
+// Project Name: 
+// Target Devices: 
+// Tool versions: 
+// Description: 
+//
+// Dependencies: 
+//
+// Revision: 
+// Revision 0.01 - File Created
+// Additional Comments: 
+//
+//////////////////////////////////////////////////////////////////////////////////
+module clk_produce(
+    input rst,      
+    input gclk1,
+    input gclk2,
+	 
+    output clk_da2_50m,  //输出的DA2时钟，gclk2驱动 
+    output clk_8m,           //输出ASK解调时钟、AD采样时钟，gclk1驱动
+    output clk_32m           //输出位同步时钟，gclk1驱动
+    );
+
+   clock u1(
+	   .inclk0(gclk1),
+	   .c0(clk_8m),
+	   .c1(clk_32m));
+    
+	 assign clk_da2_50m = gclk2;
+	 
+
+		  
+endmodule

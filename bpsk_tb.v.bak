@@ -1,0 +1,33 @@
+module bpsk_tb();
+
+wire [7:0] ad_data;
+reg gclk1, gclk2;
+reg rst;
+wire ext9, ext11;
+wire ad_clk, da2_clk;
+
+bpsk bpsk_inst(
+.gclk1(gclk1),
+.gclk2(gclk2),
+.rst(rst),
+.ext9(ext9),
+.ext11(ext11),
+.da2_clk(da2_clk),      
+.da2_out(ad_data),
+.ad_clk(ad_clk),
+.ad_din(ad_data)
+);
+
+always #10 gclk1 <= !gclk1;
+always #10 gclk2 <= !gclk2;
+
+initial begin
+	gclk1 <= 1'b0; gclk2 <= 1'b0;
+	rst <= 1'b1;
+	#5;
+	gclk2 <= 1'b0;
+	#100;
+	rst <= 1'b0;
+end
+
+endmodule

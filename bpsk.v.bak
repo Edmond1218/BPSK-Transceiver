@@ -1,0 +1,70 @@
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Engineer  : Duyong
+// Email     : duyongcn@sina.cn
+// blog      : https://blog.csdn.net/qq_37145225
+// taobao    : https://shop574143230.taobao.com/
+
+// Create Date:    10:50:21 04/15/2019 
+// Design Name: 
+// Module Name:    BoardTst 
+// Project Name: 
+// Target Devices: 
+// Tool versions: 
+// Description: 
+//
+// Dependencies: 
+//
+// Revision: 
+// Revision 0.01 - File Created
+// Additional Comments: 
+//
+//////////////////////////////////////////////////////////////////////////////////
+module bpsk(
+    //2路系统时钟及一路复位信号
+    input gclk1,
+    input gclk2,
+    input rst,
+	 
+	 output ext9 ,  //解调输出同相支路数据
+	 output ext11,  //解调输出正交支路数据
+	 
+	 //DA通道
+    output da2_clk,       
+    output [7:0] da2_out, //滤波后输出的信号
+	 
+	 //1路AD通道
+    output ad_clk,        //AD采样时钟:8MHz
+    input [7:0] ad_din
+    );
+
+
+	wire clk_da2_50m;
+	wire clk_32m    ;
+	wire clk_8m     ;
+
+   assign da2_clk = clk_da2_50m;
+	assign ad_clk  = clk_8m;
+
+
+   clk_produce u1 (
+     .rst(rst), 
+     .gclk1(gclk1), 
+     .gclk2(gclk2), 
+     .clk_da2_50m(clk_da2_50m), 
+     .clk_32m(clk_32m), 
+     .clk_8m(clk_8m));
+   
+	tstdata_produce u2(
+		 .clk  ( clk_da2_50m), 
+       .sin_mix ( da2_out));
+		
+	PolarCostas u3(
+		 .rst( rst),
+		 .clk ( clk_8m),
+		 .clk4 ( clk_32m) ,
+		 .din ( ad_din),
+		 .bit_sync ( ),
+		 .dout( {ext9,ext11}));
+		 
+endmodule
